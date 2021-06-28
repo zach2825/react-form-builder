@@ -79,4 +79,4 @@ const FourColumnRow = ({ data, class_name, ...rest }) => {
   return <MultiColumnRow {...rest} className={className} data={data} />;
 };
 
-export { TwoColumnRow, ThreeColumnRow, FourColumnRow };
+export { TwoColumnRow, ThreeColumnRow, FourColumnRow, MultiColumnRow };
