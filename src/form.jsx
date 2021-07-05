@@ -7,7 +7,9 @@ import ReactDOM from 'react-dom';
 import { EventEmitter } from 'fbemitter';
 import FormValidator from './form-validator';
 import FormElements from './form-elements';
-import { TwoColumnRow, ThreeColumnRow, FourColumnRow } from './multi-column';
+import {
+ OneColumnRow, TwoColumnRow, ThreeColumnRow, FourColumnRow,
+} from './multi-column';
 import CustomElement from './form-elements/custom-element';
 import BareElement from './form-elements/bare-element';
 import Registry from './stores/registry';
@@ -260,6 +262,7 @@ export default class ReactForm extends React.Component {
   }
 
   getContainerElement(item, Element) {
+    console.log('getContainerElement', {item, Element}, {props: this.props});
     const controls = item.childItems.map(x => (x ? this.getInputElement(this.getDataById(x)) : <div>&nbsp;</div>));
     return (<Element mutable={true} key={`form_${item.id}`} data={item} controls={controls} />);
   }
@@ -326,7 +329,43 @@ export default class ReactForm extends React.Component {
     return submitButton || <input type='submit' className='btn btn-big' value={actionName} />;
   }
 
+  handleRenderFormChildren = ({items}) => {
+    const {
+      authenticity_token,
+      task_id,
+      hide_actions,
+      back_action,
+      back_name = 'Cancel',
+    } = this.props;
+
+    const formTokenStyle = {
+      display: 'none',
+    };
+
+    return (
+      <>
+        {authenticity_token && (
+          <div style={formTokenStyle}>
+            <input name='utf8' type='hidden' value='&#x2713;' />
+            <input name='authenticity_token' type='hidden' value={authenticity_token} />
+            <input name='task_id' type='hidden' value={task_id} />
+          </div>
+        )}
+        {items}
+        <div className='btn-toolbar'>
+          {!hide_actions &&
+          this.handleRenderSubmit()
+          }
+          {!hide_actions && back_action &&
+          <a href={back_action} className='btn btn-default btn-cancel btn-big'>{back_name}</a>
+          }
+        </div>
+      </>
+    );
+  }
+
   render() {
+    const {FormWrapper} = this.props;
     let data_items = this.props.data;
 
     if (this.props.display_short) {
@@ -362,6 +401,9 @@ export default class ReactForm extends React.Component {
           return this.getContainerElement(item, ThreeColumnRow);
         case 'TwoColumnRow':
           return this.getContainerElement(item, TwoColumnRow);
+        case 'OneColumnRow':
+          console.log('form.OneColumnRow', {item, "props.data": this.props.data});
+          return this.getContainerElement(item, OneColumnRow);
         case 'Signature':
           return <Signature ref={c => this.inputs[item.field_name] = c} read_only={this.props.read_only || item.readOnly} mutable={true} key={`form_${item.id}`} data={item} defaultValue={this._getDefaultValue(item)} />;
         case 'Checkboxes':
@@ -377,38 +419,33 @@ export default class ReactForm extends React.Component {
       }
     });
 
-    const formTokenStyle = {
-      display: 'none',
-    };
-
-    const backName = (this.props.back_name) ? this.props.back_name : 'Cancel';
-
     return (
       <div>
         <FormValidator emitter={this.emitter} />
         <div className='react-form-builder-form'>
-          <form encType='multipart/form-data' ref={c => this.form = c} action={this.props.form_action} onSubmit={this.handleSubmit.bind(this)} method={this.props.form_method}>
-            {this.props.authenticity_token &&
-              <div style={formTokenStyle}>
-                <input name='utf8' type='hidden' value='&#x2713;' />
-                <input name='authenticity_token' type='hidden' value={this.props.authenticity_token} />
-                <input name='task_id' type='hidden' value={this.props.task_id} />
-              </div>
-            }
-            {items}
-            <div className='btn-toolbar'>
-              {!this.props.hide_actions &&
-                this.handleRenderSubmit()
-              }
-              {!this.props.hide_actions && this.props.back_action &&
-                <a href={this.props.back_action} className='btn btn-default btn-cancel btn-big'>{backName}</a>
-              }
-            </div>
-          </form>
+          {FormWrapper ?
+            (
+              <FormWrapper ref={c => this.form = c}>
+                {this.handleRenderFormChildren({ items })}
+              </FormWrapper>
+            ) :
+            (
+              <form
+                encType='multipart/form-data' ref={c => this.form = c}
+                action={this.props.form_action}
+                onSubmit={this.handleSubmit.bind(this)}
+                method={this.props.form_method}
+              >
+              {this.handleRenderFormChildren({ items })}
+            </form>
+            )
+          }
         </div>
       </div>
     );
   }
 }
 
-ReactForm.defaultProps = { validateForCorrectness: false };
+ReactForm.defaultProps = {
+  validateForCorrectness: false,
+};

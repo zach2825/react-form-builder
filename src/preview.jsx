@@ -38,6 +38,7 @@ export default class Preview extends React.Component {
     this.setAsChild = this.setAsChild.bind(this);
     this.removeChild = this.removeChild.bind(this);
     this._onDestroy = this._onDestroy.bind(this);
+    this._onUpdateOrder = this._onUpdateOrder.bind(this);
   }
 
   componentDidMount() {
@@ -112,6 +113,12 @@ export default class Preview extends React.Component {
       });
     }
     store.dispatch('delete', item);
+  }
+
+  _onUpdateOrder() {
+    const newData = this.state.data.slice(0);
+    store.dispatch('updateOrder', newData);
+    this.setState({ data: newData });
   }
 
   getDataById(id) {
@@ -247,7 +254,7 @@ export default class Preview extends React.Component {
     if (SortableFormElement === null) {
       return null;
     }
-    return <SortableFormElement id={item.id} seq={this.seq} index={index} moveCard={this.moveCard} insertCard={this.insertCard} mutable={false} parent={this.props.parent} editModeOn={this.props.editModeOn} isDraggable={true} key={item.id} sortData={item.id} data={item} getDataById={this.getDataById} setAsChild={this.setAsChild} removeChild={this.removeChild} _onDestroy={this._onDestroy} />;
+    return <SortableFormElement id={item.id} seq={this.seq} index={index} moveCard={this.moveCard} insertCard={this.insertCard} mutable={false} parent={this.props.parent} editModeOn={this.props.editModeOn} isDraggable={true} key={item.id} sortData={item.id} data={item} getDataById={this.getDataById} setAsChild={this.setAsChild} removeChild={this.removeChild} _onDestroy={this._onDestroy} _onUpdateOrder={this._onUpdateOrder}/>;
   }
 
   showEditForm() {

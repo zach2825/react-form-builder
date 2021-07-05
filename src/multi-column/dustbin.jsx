@@ -43,11 +43,15 @@ function getBareElement(item, props) {
 
 function getElement(item, props) {
   if (!item) return null;
-  const Element = item.custom ?
-    () => getCustomElement(item, props) :
-    item.bare?
-      () => getBareElement(item, props):
-      FormElements[item.element || item.key];
+  let Element = null;
+
+  if(item.custom){
+    Element =  () => getCustomElement(item, props);
+  }else if(item.bare){
+    Element = () => getBareElement(item, props)
+  } else{
+    Element = FormElements[item.element || item.key];
+  }
 
   return (
     <Fragment>
