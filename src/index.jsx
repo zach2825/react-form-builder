@@ -10,6 +10,7 @@ import Toolbar from './toolbar';
 import ReactFormGenerator from './form';
 import store from './stores/store';
 import Registry from './stores/registry';
+import ReactFormWithContext from './formWithFormContext';
 
 class ReactFormBuilder extends React.Component {
   constructor(props) {
@@ -88,11 +89,16 @@ class ReactFormBuilder extends React.Component {
 const FormBuilders = {};
 FormBuilders.ReactFormBuilder = ReactFormBuilder;
 FormBuilders.ReactFormGenerator = ReactFormGenerator;
+FormBuilders.ReactFormWithContext = ReactFormWithContext;
 FormBuilders.ElementStore = store;
 FormBuilders.Registry = Registry;
 
 export default FormBuilders;
 
 export {
- ReactFormBuilder, ReactFormGenerator, store as ElementStore, Registry,
+  ReactFormBuilder,
+  ReactFormGenerator,
+  ReactFormWithContext,
+  store as ElementStore,
+  Registry,
 };

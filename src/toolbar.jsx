@@ -367,8 +367,7 @@ export default class Toolbar extends React.Component {
       }
     }
 
-    const newProps = {...item, ...elementOptions};
-    console.log({newProps});
+    return { ...item, ...elementOptions };
     return newProps;
   }
 

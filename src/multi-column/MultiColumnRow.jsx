@@ -1,11 +1,11 @@
 /* eslint-disable camelcase */
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 
 import ComponentHeader from '../form-elements/component-header';
 import ComponentLabel from '../form-elements/component-label';
 import Dustbin from './dustbin';
 import ItemTypes from '../ItemTypes';
-import store from '../stores/store';
+// import store from '../stores/store';
 
 const accepts = [ItemTypes.BOX, ItemTypes.CARD];
 
@@ -21,7 +21,6 @@ const MultiColumnRow = (props) => {
     className,
     index,
   } = props;
-
 
   const { childItems, pageBreakBefore } = data;
   let baseClasses = 'SortableItem rfb-item';
@@ -58,24 +57,14 @@ const MultiColumnRow = (props) => {
       </div>
     </div>
   );
-}
+};
 
 const OneColumnRow = (props) => {
   const { data, class_name, _onUpdateOrder, ...rest } = props;
 
-  const {
-    onDuplicate: onDuplicate1= () => console.log('fail2'),
-  } = props;
-
-  const {
-    onDuplicate: onDuplicate2 = () => console.log('fail1'),
-  } = rest;
-
   const { editModeOn = false } = rest;
   const [colData, setColData] = useState(data);
   const className = class_name || 'col-md-12';
-
-  console.log({data,className, rest, props});
 
   if (!data.childItems) {
     // eslint-disable-next-line no-param-reassign
@@ -84,42 +73,38 @@ const OneColumnRow = (props) => {
   }
 
   const addAnotherInput = () => {
-    console.log('all the clicking!', {data,className, rest, props});
-
-    onDuplicate1();
-    onDuplicate2();
-
-    if (editModeOn) {
-      data.childItems.push(null);
-      _onUpdateOrder();
-      setColData({ ...data });
-      // store.dispatch('updateOrder', data);
-    } else {
-      // duplicate the whole element maybe use a callback. This duplication only
-      // happens so an array of answers can be collected.
-    }
+    data.childItems.push(null);
+    _onUpdateOrder();
+    setColData({ ...data });
   };
 
   const cleanUp = () => {
     data.childItems = data.childItems.filter(c => c);
     _onUpdateOrder();
     setColData({ ...data });
-  }
+  };
 
   const hasEmpties = useMemo(() => {
-    return colData.childItems.filter(c => !c).length>0;
+    return colData.childItems.filter(c => !c).length > 0;
   }, [colData]);
 
   return (
     <div>
-      <button type="button" onClick={addAnotherInput}>
-        {editModeOn ? 'add another input' : '+'}
-      </button>
-      {editModeOn && hasEmpties && <button type="button" onClick={cleanUp}>cleanup empty</button>}
+      {editModeOn && (
+        <button
+          type="button"
+          onClick={addAnotherInput}
+          className="btn btn-primary"
+        >
+          Add another input
+        </button>
+      )}
+      {editModeOn && hasEmpties &&
+      <button type="button" className="btn btn-warning mx-3"
+              onClick={cleanUp}>cleanup empty</button>}
       {!editModeOn && data.buttons && data.buttons.map(b => {
-        console.log('OneColumnRow', {b});
-        return React.createElement(b.type, b.props)
-      }) }
+        return React.createElement(b.type, b.props);
+      })}
       <MultiColumnRow {...rest} className={className} data={colData} />
     </div>
   );
@@ -129,7 +114,8 @@ const TwoColumnRow = ({ data, class_name, ...rest }) => {
   const className = class_name || 'col-md-6';
   if (!data.childItems) {
     // eslint-disable-next-line no-param-reassign
-    data.childItems = [null, null]; data.isContainer = true;
+    data.childItems = [null, null];
+    data.isContainer = true;
   }
   return (
     <MultiColumnRow {...rest} className={className} data={data} />
@@ -140,7 +126,8 @@ const ThreeColumnRow = ({ data, class_name, ...rest }) => {
   const className = class_name || 'col-md-4';
   if (!data.childItems) {
     // eslint-disable-next-line no-param-reassign
-    data.childItems = [null, null, null]; data.isContainer = true;
+    data.childItems = [null, null, null];
+    data.isContainer = true;
   }
   return (
     <MultiColumnRow {...rest} className={className} data={data} />
@@ -157,6 +144,16 @@ const FourColumnRow = ({ data, class_name, ...rest }) => {
   return <MultiColumnRow {...rest} className={className} data={data} />;
 };
 
-export {
- OneColumnRow, TwoColumnRow, ThreeColumnRow, FourColumnRow, MultiColumnRow,
+const Containers = {
+  OneColumnRow,
+  TwoColumnRow,
+  ThreeColumnRow,
+  FourColumnRow,
+  MultiColumnRow,
 };
+
+export {
+  OneColumnRow, TwoColumnRow, ThreeColumnRow, FourColumnRow, MultiColumnRow,
+};
+
+export default Containers;

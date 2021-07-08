@@ -8,7 +8,10 @@ import { EventEmitter } from 'fbemitter';
 import FormValidator from './form-validator';
 import FormElements from './form-elements';
 import {
- OneColumnRow, TwoColumnRow, ThreeColumnRow, FourColumnRow,
+  OneColumnRow,
+  TwoColumnRow,
+  ThreeColumnRow,
+  FourColumnRow,
 } from './multi-column';
 import CustomElement from './form-elements/custom-element';
 import BareElement from './form-elements/bare-element';
@@ -262,9 +265,16 @@ export default class ReactForm extends React.Component {
   }
 
   getContainerElement(item, Element) {
-    console.log('getContainerElement', {item, Element}, {props: this.props});
-    const controls = item.childItems.map(x => (x ? this.getInputElement(this.getDataById(x)) : <div>&nbsp;</div>));
-    return (<Element mutable={true} key={`form_${item.id}`} data={item} controls={controls} />);
+    const controls = item.childItems.map((x) => {
+      if (!x) {
+        return <div style={{ display: 'none' }}>&nbsp;</div>;
+      }
+
+      const foundElement = this.getDataById(x);
+      return this.getInputElement(foundElement);
+    });
+    return (<Element mutable={true} key={`form_${item.id}`} data={item}
+                     controls={controls} />);
   }
 
   getSimpleElement(item) {
@@ -402,7 +412,6 @@ export default class ReactForm extends React.Component {
         case 'TwoColumnRow':
           return this.getContainerElement(item, TwoColumnRow);
         case 'OneColumnRow':
-          console.log('form.OneColumnRow', {item, "props.data": this.props.data});
           return this.getContainerElement(item, OneColumnRow);
         case 'Signature':
           return <Signature ref={c => this.inputs[item.field_name] = c} read_only={this.props.read_only || item.readOnly} mutable={true} key={`form_${item.id}`} data={item} defaultValue={this._getDefaultValue(item)} />;

@@ -5,7 +5,6 @@ import SignaturePad from 'react-signature-canvas';
 import ReactBootstrapSlider from 'react-bootstrap-slider';
 
 import StarRating from './star-rating';
-import HeaderBar from './header-bar';
 import DatePicker from './date-picker';
 import ComponentHeader from './component-header';
 import ComponentLabel from './component-label';
@@ -581,7 +580,7 @@ class Camera extends React.Component {
         sourceDataURL = `data:image/png;base64,${this.props.defaultValue}`;
       }
     }
-    console.log('sourceDataURL', sourceDataURL);
+
     return (
       <div className={baseClasses}>
         <ComponentHeader {...this.props} />
