@@ -16,7 +16,14 @@ const ReactFormWithContext = (props) => {
     download_path,
     formContext,
   } = props;
-  const { form, setForm, onChange: ctxOnChange, getValue } = formContext;
+  const {
+    form,
+    setForm,
+    onChange: ctxOnChange,
+    getValue,
+    editing: ctxEditing,
+    shouldShow: ctxShouldShow,
+  } = formContext;
   const inputs = {};
 
   const onChange = (e) => {
@@ -81,7 +88,16 @@ const ReactFormWithContext = (props) => {
 
   const getContainerElement = (
     item, Element, { allowDuplicate = false } = {}) => {
-    let thisGroupValues = getValue(item.custom_name || item.name, '');
+    const { props, custom_name, name } = item;
+    const { customRule } = props || {};
+
+    console.log({ ctxEditing, customRule, item });
+
+    if (!ctxEditing && customRule && !ctxShouldShow(customRule)) {
+      return null;
+    }
+
+    let thisGroupValues = getValue(custom_name || name, '');
 
     if (!thisGroupValues.length) {
       thisGroupValues = [{}];
@@ -92,10 +108,6 @@ const ReactFormWithContext = (props) => {
         if (!x) {
           return <div style={{ display: 'none' }}>&nbsp;</div>;
         }
-
-        // if(allowDuplicate){
-        //   return getInputElement(getDataById(x), {inContainer: true, index: groupIndex, container: item});
-        // }
 
         return getInputElement(getDataById(x));
       });
