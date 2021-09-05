@@ -1,22 +1,22 @@
 /**
-  * <Preview />
-  */
+ * <Preview />
+ */
 
-import React from 'react';
-import update from 'immutability-helper';
-import store from './stores/store';
-import FormElementsEdit from './form-elements-edit';
-import SortableFormElements from './sortable-form-elements';
+import React from 'react'
+import update from 'immutability-helper'
+import store from './stores/store'
+import FormElementsEdit from './form-elements-edit'
+import SortableFormElements from './sortable-form-elements'
 
-const { PlaceHolder } = SortableFormElements;
+const { PlaceHolder } = SortableFormElements
 
 export default class Preview extends React.Component {
   state = {
     data: [],
     answer_data: {},
-  };
+  }
 
-  constructor(props) {
+  constructor (props) {
     super(props);
 
     const { onLoad, onPost } = props;
@@ -294,6 +294,6 @@ Preview.defaultProps = {
   files: [],
   editMode: false,
   editElement: null,
-  className: 'col-md-9 react-form-builder-preview float-left',
+  className: 'col-md-9 react-form-builder-preview',
   renderEditForm: props => <FormElementsEdit {...props} />,
 };

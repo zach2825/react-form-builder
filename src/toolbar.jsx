@@ -1,20 +1,20 @@
 /**
-  * <Toolbar />
-  */
+ * <Toolbar />
+ */
 
-import React from 'react';
-import ToolbarItem from './toolbar-draggable-item';
-import ID from './UUID';
-import store from './stores/store';
+import React from 'react'
+import ToolbarItem from './toolbar-draggable-item'
+import ID from './UUID'
+import store from './stores/store'
 
-function isDefaultItem(item) {
-  const keys = Object.keys(item);
-  return keys.filter(x => x !== 'element' && x !== 'key').length === 0;
+function isDefaultItem (item) {
+  const keys = Object.keys(item)
+  return keys.filter(x => x !== 'element' && x !== 'key').length === 0
 }
 
-function buildItems(items, defaultItems) {
+function buildItems (items, defaultItems) {
   if (!items) {
-    return defaultItems;
+    return defaultItems
   }
   return items.map(x => {
     let found;
@@ -378,11 +378,14 @@ export default class Toolbar extends React.Component {
 
   render() {
     return (
-      <div className="col-md-3 react-form-builder-toolbar float-right">
+      <div className="col-md-3 react-form-builder-toolbar">
         <h4>Toolbox</h4>
         <ul>
           {
-            this.state.items.map((item) => (<ToolbarItem data={item} key={item.key} onClick={this._onClick.bind(this, item)} onCreate={this.create} />))
+            this.state.items.map((item) => (
+              <ToolbarItem data={item} key={item.key}
+                           onClick={this._onClick.bind(this, item)}
+                           onCreate={this.create} />))
           }
         </ul>
       </div>
