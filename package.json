@@ -1,6 +1,6 @@
 {
   "name": "react-form-builder3",
-  "version": "5.2.4",
+  "version": "5.2.5",
   "description": "A complete form builder for react.",
   "main": "lib/index.js",
   "license": "MIT",
