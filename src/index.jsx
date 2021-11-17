@@ -2,25 +2,25 @@
  * <ReactFormBuilder />
  */
 
-import React from 'react'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import Preview from './preview'
-import Toolbar from './toolbar'
-import ReactFormGenerator from './form'
-import store from './stores/store'
-import Registry from './stores/registry'
-import ReactFormWithContext from './formWithFormContext'
+import React from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import Preview from './preview';
+import Toolbar from './toolbar';
+import ReactFormGenerator from './form';
+import store from './stores/store';
+import Registry from './stores/registry';
+import ReactFormWithContext from './formWithFormContext';
 
 class ReactFormBuilder extends React.Component {
   constructor (props) {
-    super(props)
+    super(props);
 
     this.state = {
       editMode: false,
       editElement: null,
-    }
-    this.editModeOn = this.editModeOn.bind(this)
+    };
+    this.editModeOn = this.editModeOn.bind(this);
   }
 
   editModeOn(data, e) {
@@ -76,6 +76,7 @@ class ReactFormBuilder extends React.Component {
                 registry={Registry}
                 editElement={this.state.editElement}
                 renderEditForm={this.props.renderEditForm}
+                hideGrip={this.props.hideGrip}
               />
               <Toolbar {...toolbarProps} customItems={this.props.customToolbarItems} />
             </div>

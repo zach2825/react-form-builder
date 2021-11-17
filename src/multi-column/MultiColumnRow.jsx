@@ -20,6 +20,7 @@ const MultiColumnRow = (props) => {
     seq,
     className,
     index,
+    hideGrip = false,
   } = props;
 
   const { childItems, pageBreakBefore } = data;
@@ -40,6 +41,7 @@ const MultiColumnRow = (props) => {
             <div key={`${i}_${x || '_'}`} className={className}>{
               controls ? controls[i] :
                 <Dustbin
+                  hideGrip={hideGrip}
                   style={{ width: '100%' }}
                   data={data}
                   accepts={accepts}

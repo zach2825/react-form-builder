@@ -264,7 +264,7 @@ export default class ReactForm extends React.Component {
       defaultValue={this._getDefaultValue(item)} />);
   }
 
-  getContainerElement(item, Element) {
+  getContainerElement (item, Element) {
     const controls = item.childItems.map((x) => {
       if (!x) {
         return <div style={{ display: 'none' }}>&nbsp;</div>;
@@ -273,8 +273,15 @@ export default class ReactForm extends React.Component {
       const foundElement = this.getDataById(x);
       return this.getInputElement(foundElement);
     });
-    return (<Element mutable={true} key={`form_${item.id}`} data={item}
-                     controls={controls} />);
+    return (
+      <Element
+        mutable={true}
+        key={`form_${item.id}`}
+        data={item}
+        controls={controls}
+        hideGrip={this.props.hideGrip}
+      />
+    );
   }
 
   getSimpleElement(item) {
