@@ -104,6 +104,10 @@ export default class Preview extends React.Component {
   }
 
   _onDestroy(item) {
+    if (!confirm('Sure?')) {
+      return false;
+    }
+
     if (item.childItems) {
       item.childItems.forEach(x => {
         const child = this.getDataById(x);
